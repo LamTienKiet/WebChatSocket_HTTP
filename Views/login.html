@@ -1,0 +1,23 @@
+﻿<nav class='nav'>
+    <a href='/' class='nav-brand'>&gt; ChatServer_</a>
+</nav>
+
+<div class='container'>
+    <div class='profile-card'>
+        <h1 class='page-title'>Đăng nhập</h1>
+
+        {{ERROR}}
+
+        <form method='POST' action='/login'>
+            <div class='form-group'>
+                <input class='form-input' name='username' placeholder='Username' value='{{USERNAME}}' />
+            </div>
+
+            <div class='form-group'>
+                <input class='form-input' type='password' name='password' placeholder='Password' />
+            </div>
+
+            <button class='btn btn-primary' style='width:100%'>Login</button>
+        </form>
+    </div>
+</div>

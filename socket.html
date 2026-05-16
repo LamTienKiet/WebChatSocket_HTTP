@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebSocket Chat</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: #0f172a;
+        color: white;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 30px auto;
+        display: flex;
+        flex-direction: column;
+        height: 90vh;
+      }
+
+      .header {
+        padding: 15px;
+        background: #1e293b;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .status {
+        font-size: 14px;
+        color: #94a3b8;
+      }
+
+      .chat-box {
+        flex: 1;
+        background: #020617;
+        padding: 15px;
+        overflow-y: auto;
+        border-left: 1px solid #1e293b;
+        border-right: 1px solid #1e293b;
+      }
+
+      .message {
+        margin-bottom: 10px;
+      }
+
+      .system {
+        color: #facc15;
+      }
+
+      .user {
+        color: #38bdf8;
+      }
+
+      .input-area {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+        background: #1e293b;
+        border-radius: 0 0 10px 10px;
+      }
+
+      input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        background: #020617;
+        color: white;
+      }
+
+      button {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        background: #3b82f6;
+        color: white;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #2563eb;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <div>💬 WebSocket Chat</div>
+        <div id="status" class="status">🔴 Disconnected</div>
+      </div>
+
+      <div id="chat" class="chat-box"></div>
+
+      <div class="input-area">
+        <input id="msg" placeholder="Nhập tin nhắn..." />
+        <button onclick="sendMsg()">Gửi</button>
+      </div>
+    </div>
+
+    <script>
+      let ws;
+      let chat = document.getElementById("chat");
+      let status = document.getElementById("status");
+
+      function connect() {
+        ws = new WebSocket("ws://localhost:9090/");
+
+        ws.onopen = () => {
+          status.innerText = "🟢 Connected";
+          addMessage("SYSTEM", "Đã kết nối server");
+        };
+
+        ws.onmessage = (event) => {
+          addMessage("USER", event.data);
+        };
+
+        ws.onclose = () => {
+          status.innerText = "🔴 Disconnected";
+          addMessage("SYSTEM", "Mất kết nối");
+        };
+      }
+
+      function sendMsg() {
+        let input = document.getElementById("msg");
+        let text = input.value.trim();
+
+        if (!text || !ws) return;
+
+        ws.send(text);
+        input.value = "";
+      }
+
+      function addMessage(type, text) {
+        let div = document.createElement("div");
+        div.classList.add("message");
+
+        if (text.includes("[SYSTEM]")) div.classList.add("system");
+        else div.classList.add("user");
+
+        div.innerText = text;
+
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      // Enter để gửi
+      document.getElementById("msg").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") sendMsg();
+      });
+
+      // Auto connect khi mở
+      connect();
+    </script>
+  </body>
+</html>

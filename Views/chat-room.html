@@ -1,0 +1,26 @@
+﻿<nav class='nav'>
+    <a href='/' class='nav-brand'>&gt; ChatServer_</a>
+    <a href='/chat' class='nav-link'>Rooms</a>
+</nav>
+
+<div class='chat-layout'>
+
+    <div class='chat-header'>
+        <div class='chat-room-name'>
+            <span class='online-dot'></span>
+            {{ROOM_NAME}}
+        </div>
+    </div>
+
+    <div class='chat-messages'>
+        {{MESSAGES}}
+    </div>
+
+    <div class='chat-input-area'>
+        <form class='chat-form' method='POST'>
+            <textarea class='chat-input' name='message' placeholder='Nhập tin nhắn...'></textarea>
+            <button class='btn btn-primary'>Send</button>
+        </form>
+    </div>
+
+</div>
